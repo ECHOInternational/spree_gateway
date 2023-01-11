@@ -94,9 +94,9 @@ module Spree
     def credit_without_payment_profiles(amount, response_code, options)
       provider # braintree provider needs to be called here to properly configure braintree gem.
       transaction = ::Braintree::Transaction.find(response_code)
-      if BigDecimal.new(amount.to_s) == (transaction.amount * 100)
+      if BigDecimal(amount.to_s) == (transaction.amount * 100)
         provider.refund(response_code)
-      elsif BigDecimal.new(amount.to_s) < (transaction.amount * 100) # support partial refunds
+      elsif BigDecimal(amount.to_s) < (transaction.amount * 100) # support partial refunds
         provider.refund(amount, response_code)
       else
         raise NotImplementedError
